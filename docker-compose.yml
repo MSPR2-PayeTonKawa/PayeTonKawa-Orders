@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  orders-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orders-app
+    ports:
+      - "8001:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - orders-db
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=orders-db
+      - DB_PORT=3306
+      - DB_DATABASE=orders_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+
+  orders-db:
+    image: mysql:8.0
+    container_name: orders-db
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: orders_db
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
