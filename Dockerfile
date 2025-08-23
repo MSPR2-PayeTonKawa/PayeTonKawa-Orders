@@ -6,6 +6,9 @@ RUN apt-get update && apt-get install -y \
     zip unzip git curl libzip-dev libonig-dev libxml2-dev \
     && docker-php-ext-install pdo pdo_mysql zip
 
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath sockets
+
 RUN a2enmod rewrite
 
 COPY . .
@@ -19,6 +22,17 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    git \
+    curl
+
 EXPOSE 80
 
 CMD ["apache2-foreground"]
+
+
